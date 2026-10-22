@@ -1,0 +1,33 @@
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "navigationUrls": ["/**", "!/**/*.*", "!/api/**", "!/uploads/**", "!/swagger/**", "!/health"],
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
+      }
+    },
+    {
+      "name": "fonts",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": { "files": ["/media/*.woff2", "/**/*.woff2"] }
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": { "files": ["/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff)"] }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "product-images",
+      "urls": ["/uploads/products/**", "/uploads/logo/**"],
+      "cacheConfig": { "strategy": "performance", "maxSize": 500, "maxAge": "90d" }
+    }
+  ]
+}

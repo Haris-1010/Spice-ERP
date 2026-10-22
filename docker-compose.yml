@@ -1,0 +1,35 @@
+# Quick start:  cp .env.example .env  (edit the secrets)  then  docker compose up -d --build
+# App: http://localhost:8080   ·   Swagger: http://localhost:8080/swagger
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: spice_erp
+      POSTGRES_USER: spice
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    volumes: [ "pgdata:/var/lib/postgresql/data" ]
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U spice -d spice_erp" ]
+      interval: 5s
+      retries: 20
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=spice_erp;Username=spice;Password=${DB_PASSWORD}"
+      Jwt__Key: ${JWT_KEY:?set JWT_KEY in .env (32+ characters)}
+      Seed__AdminUsername: ${ADMIN_USERNAME:-admin}
+      Seed__AdminPassword: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      Seed__BusinessName: ${BUSINESS_NAME:-My Spice Company}
+      Seed__DemoCatalog: ${DEMO_CATALOG:-true}
+      Swagger__Enabled: ${SWAGGER:-true}
+      Cors__Origins__0: ${PUBLIC_URL:-http://localhost:8080}
+    ports: [ "8080:8080" ]
+    volumes: [ "uploads:/data/uploads" ]
+
+volumes:
+  pgdata:
+  uploads:

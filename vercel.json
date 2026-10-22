@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd frontend && npm run build",
+  "installCommand": "cd frontend && npm ci",
+  "outputDirectory": "frontend/dist/frontend/browser",
+  "framework": null
+}

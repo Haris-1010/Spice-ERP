@@ -1,0 +1,8 @@
+.env
+**/bin/
+**/obj/
+**/node_modules/
+frontend/dist/
+frontend/.angular/
+backend/SpiceErp.Api/uploads/
+backups/
